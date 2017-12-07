@@ -42,14 +42,12 @@ class StreamerLicenseToolDlg(BaseDlg1):
         self.label_username = QLabel(self.horizontalLayoutWidget)
         self.label_username.setObjectName("label_username")
         self.horizontalLayout.addWidget(self.label_username)
-
         self.label_password = QLabel(self.horizontalLayoutWidget)
         self.label_password.setObjectName("label_password")
         self.horizontalLayout.addWidget(self.label_password)
         self.lineEdit_password = QLineEdit(self.horizontalLayoutWidget)
         self.lineEdit_password.setObjectName("lineEdit_password")
         self.horizontalLayout.addWidget(self.lineEdit_password)
-
         self.label_text = QLabel(self)
         self.label_text.setGeometry(QRect(20, 50, 460, 20))
         self.label_text.setObjectName("label_text")

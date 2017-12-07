@@ -31,6 +31,11 @@ class BaseDlg1(QDialog):
         self.widget_width_space_5 = 5   #控件之间的宽度间隙
         self.row_spacing_10 = 10  # 行间距
         self.col_spacing_10 = 10  # 列间距
+        self.label_width_40 = 40
+        self.label_heigth_25 = 25
+        self.lineEdit_width_80 = 80
+        self.lineEdit_width_20 = 20
+        self.lineEdit_heigth_25 = 18
 
     def init_ui(self):
         pass
