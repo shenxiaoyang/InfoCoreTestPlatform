@@ -2,7 +2,7 @@
 import collections
 import threading
 
-from StreamerTestPlatformGlobalVars import run_path
+from InfoCoreTestPlatformGlobalVars import run_path
 
 global time_calibration_machine_setting_dict
 time_calibration_machine_setting_dict = collections.OrderedDict()

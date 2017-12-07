@@ -2,7 +2,7 @@
 import collections
 import threading
 
-from StreamerTestPlatformGlobalVars import run_path
+from InfoCoreTestPlatformGlobalVars import run_path
 
 #日志收集工具服务器配置信息字典，所有的服务器配置信息都保存在这个字典中
 global machine_setting_dict

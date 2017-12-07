@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 import os
-from StreamerTestPlatformGlobalVars import run_path
+from InfoCoreTestPlatformGlobalVars import run_path
 
 def clean_logs():
     streamer_install_log_path = r'{}\install_log'.format(run_path)

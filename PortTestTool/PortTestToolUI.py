@@ -5,7 +5,7 @@ import logging
 import socket
 import re
 
-from StreamerTestPlatformBaseUI import BaseDlg1
+from InfoCoreTestPlatformBaseUI import BaseDlg1
 from InfoCoreTools.WindowsCMD import pingIP
 
 logger = logging.getLogger('root.PortTestTool.PortTestToolUI')

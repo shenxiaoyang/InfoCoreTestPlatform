@@ -8,10 +8,10 @@ from PyQt5 import QtWidgets
 from cryptography.hazmat.backends.openssl.backend import backend
 x = backend
 
-from StreamerTestPlatformGlobalVars import run_path
+from InfoCoreTestPlatformGlobalVars import run_path
 from LogCollectTool.LogCollectToolGlobalVars import parameters_setting_file,parameters_setting_dict
-from StreamerTestPlatformFunctions import clean_logs
-from StreamerTestPlatformUI import MainWindows
+from InfoCoreTestPlatformFunctions import clean_logs
+from InfoCoreTestPlatformUI import MainWindows
 from LogCollectTool.LogCollectToolFunctions import read_parameters_setting_from_xls
 
 #创建..\log\ 日志文件夹

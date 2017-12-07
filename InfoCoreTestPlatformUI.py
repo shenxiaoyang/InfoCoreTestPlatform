@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import logging
 
-from StreamerTestPlatformBaseUI import BaseDlg1
+from InfoCoreTestPlatformBaseUI import BaseDlg1
 from LogCollectTool.LogCollectToolUI import LogCollectToolDlg
 from StreamerLicenseTool.StreamerLicenseToolUI import StreamerLicenseToolDlg
 from LogCollectTool.LogCollectToolFunctions import read_machine_setting_from_xls

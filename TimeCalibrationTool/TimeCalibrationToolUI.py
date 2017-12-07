@@ -5,10 +5,10 @@ import logging
 
 logger = logging.getLogger('root.TimeCalibrationTool.TimeCalibrationToolUI')
 
-from StreamerTestPlatformBaseUI import BaseDlg1
+from InfoCoreTestPlatformBaseUI import BaseDlg1
 from TimeCalibrationTool.TimeCalibrationToolGlobalVars import time_calibration_machine_setting_dict
 from TimeCalibrationTool.TimeCalibrationToolClass import TimeCalibrationToolMachine
-from StreamerTestPlatformGlobalVars import total_os_types
+from InfoCoreTestPlatformGlobalVars import total_os_types
 from TimeCalibrationTool.TimeCalibrationToolFunctions import save_time_calibration_machine_setting_to_xls
 from TimeCalibrationTool.TimeCalibrationToolGlobalVars import time_calibration_machine_setting_file
 from InfoCoreTools.Time import time_minus

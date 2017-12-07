@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import *
 import logging
 import os
 
-from StreamerTestPlatformGlobalVars import run_path,total_roles,total_os_types
-from StreamerTestPlatformBaseUI import BaseDlg1
+from InfoCoreTestPlatformGlobalVars import run_path,total_roles,total_os_types
+from InfoCoreTestPlatformBaseUI import BaseDlg1
 from LogCollectTool.LogCollectToolClass import LogCollectToolMachine
 from LogCollectTool.LogCollectToolGlobalVars import machine_setting_dict
 from LogCollectTool.LogCollectToolGlobalVars import log_path_setting_dict

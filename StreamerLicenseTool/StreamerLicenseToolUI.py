@@ -7,7 +7,7 @@ import re
 import datetime
 import socket
 
-from StreamerTestPlatformBaseUI import BaseDlg1
+from InfoCoreTestPlatformBaseUI import BaseDlg1
 from StreamerLicenseTool.StreamerLicenseToolGlobalVars import author_server
 from InfoCoreTools.WindowsCMD import pingIP
 from InfoCoreTools.SSH import ssh
