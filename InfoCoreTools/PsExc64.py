@@ -144,13 +144,13 @@ def windows_do_cmd(ip, username, password, cmd):
         if not os.path.exists(psexec64):
             logging.error('psexec工具不存在')
             return None
-        cmd1 = r'{} -s \\{} -u {} -p "{}" cmd.exe /c "{}" 2>&1'.format(psexec64,ip,username,password,cmd)
+        cmd1 = r'"{}" -s \\{} -u {} -p "{}" cmd.exe /c "{}" 2>&1'.format(psexec64,ip,username,password,cmd)
         logging.info('命令行为:{}'.format(cmd1))
         output = os.popen(cmd1).read()
 
         if output.find("版本不兼容") != -1:
             logging.info('Psexec 64位版本获取失败，尝试使用32位版本')
-            cmd2 = r'{} -s \\{} -u {} -p "{}" cmd.exe /c "{}" 2>&1'.format(psexec32, ip, username, password, cmd)
+            cmd2 = r'"{}" -s \\{} -u {} -p "{}" cmd.exe /c "{}" 2>&1'.format(psexec32, ip, username, password, cmd)
             logging.info('命令行为:{}'.format(cmd2))
             output = os.popen(cmd2).read()
 
