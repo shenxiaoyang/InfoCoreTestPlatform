@@ -104,26 +104,35 @@ def get_windows_time_str(ip, username, password):
         logging.info('准备获取{}的系统时间'.format(ip))
         cmd = 'echo %date% %time%'
         output = windows_do_cmd(ip,username,password,cmd)
-        output = output.split(' ')
-        for i in range(len(output)):
-            if output[i] == ' ':
-                output.pop(i)
-        logging.info('[get_windows_time_str]:{}'.format(output))
-        year = output[0].split('/')[0]
-        month = output[0].split('/')[1]
-        day = output[0].split('/')[2]
-        hrs = output[2].split(':')[0]
-        minute = output[2].split(':')[1]
-        sec = output[2].split(':')[2].split('.')[0]
-        windows_time_str = "%s-%s-%s %s:%s:%s" % (year, month, day, hrs, minute, sec)
-        logging.info('{}的系统时间为:{}'.format(ip,windows_time_str))
-        return windows_time_str,True
+        if output == None:
+            return r'未知错误windows_do_cmd'
+        else:
+            output = output.split(' ')
+            i = 0
+            while 1:
+                try:
+                    if output[i] == ' ':  # 列表中删除所有的' '元素
+                        output.pop(i)
+                    else:
+                        i = i + 1
+                except IndexError:
+                    break
+            logging.info('[get_windows_time_str]:{}'.format(output))
+            year = output[0].split('/')[0]
+            month = output[0].split('/')[1]
+            day = output[0].split('/')[2]
+            hrs = output[2].split(':')[0]
+            minute = output[2].split(':')[1]
+            sec = output[2].split(':')[2].split('.')[0]
+            windows_time_str = "%s-%s-%s %s:%s:%s" % (year, month, day, hrs, minute, sec)
+            logging.info('{}的系统时间为:{}'.format(ip,windows_time_str))
+            return windows_time_str,True
     except IndexError:
         logging.info('无法获取{}系统时间.[{}]'.format(ip,output))
         return '系统时间获取失败', False
     except BaseException:
         logging.exception("未知错误")
-        return None,False
+        return '未知错误',False
 
 def time_minus(time1, time2):
     logging.info('[time_minus]{} {}'.format(time1,time2))

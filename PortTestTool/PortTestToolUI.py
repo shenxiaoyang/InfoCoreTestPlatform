@@ -18,7 +18,7 @@ class PortTestToolDlg(BaseDlg1):
 
     def init_ui(self):
         self.setObjectName("SingleOnlineActiveDlg")
-        self.resize(340, 60)  # 设置窗口大小
+        self.resize(350, 60)  # 设置窗口大小
         self.setFixedSize(self.width(), self.height())  # 固定窗口大小
         self.setWindowTitle('端口测试')  # 设置窗口标题
 
@@ -47,12 +47,12 @@ class PortTestToolDlg(BaseDlg1):
         self.horizontalLayout2.addWidget(self.lineEdit_port)
 
         self.horizontalLayoutWidget3 = QWidget(self)
-        self.horizontalLayoutWidget3.setGeometry(QRect(270, 0, 70, 60))
+        self.horizontalLayoutWidget3.setGeometry(QRect(270, 0, 80, 60))
         self.horizontalLayout3 = QHBoxLayout(self.horizontalLayoutWidget3)
         self.horizontalLayout3.setContentsMargins(10, 10, 10, 10)
 
         self.btn_test = QPushButton(self)
-        self.btn_test.setText(' 测 试 ')
+        self.btn_test.setText('端口测试')
         self.horizontalLayout3.addWidget(self.btn_test)
 
     def connect_all_signal_slot(self):

@@ -32,7 +32,7 @@ class MainWindows(QMainWindow):
 
     def init_ui(self):
         self.setObjectName("MainWindow")
-        self.resize(140, 240)  # 设置窗口大小
+        self.resize(140, 260)  # 设置窗口大小
         self.setFixedSize(self.width(), self.height())  # 固定窗口大小
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         self.setWindowTitle('InfoCore测试')
@@ -84,6 +84,14 @@ class MainWindows(QMainWindow):
                                                           button_width1,
                                                           button_height))
         self.btn_computer_power_control.setText('服务器电源控制')
+
+        i = i + 1
+        self.btn_computer_init = QPushButton(self)  # 按钮-Streamer冒烟测试
+        self.btn_computer_init.setGeometry(QRect(x_margin,
+                                                 y_margin + i * (button_height + row_spacing),
+                                                 button_width1,
+                                                 button_height))
+        self.btn_computer_init.setText('服务器初始化')
 
 
         i = i + 1

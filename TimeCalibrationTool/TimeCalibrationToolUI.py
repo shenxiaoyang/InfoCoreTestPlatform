@@ -49,10 +49,10 @@ class TimeCalibrationToolMonitorUIThread(QThread):
             i = i + 1
             try:
                 for ip in time_calibration_machine_setting_dict:
-                    logging.info('---计算{}的时间差---[count:{}]'.format(ip,i))
+                    logging.info('---计算{}的时间差start---[count:{}]'.format(ip,i))
                     local_time_diff_dict[ip] = time_minus(time_dict['本地时间'],time_dict[ip])
                     beijin_time_diff_dict[ip] = time_minus(time_dict['北京时间'],time_dict[ip])
-                    logging.info('---计算{}的时间差---[count:{}]'.format(ip,i))
+                    logging.info('---计算{}的时间差end---[count:{}]'.format(ip,i))
                 self.signal_update_time_calibration_tool_table.emit()  # 发射信号
             except BaseException:
                 logging.exception('未知错误')
@@ -315,8 +315,8 @@ class TimeCalibrationToolDlg(BaseDlg1):
             for ip in time_calibration_machine_setting_dict:
                 server = time_calibration_machine_setting_dict[ip]
                 if pingIP(server.ip_address) == 0:
-                    #beijin_time_diff_dict[ip] = '正在获取......'
-                    #local_time_diff_dict[ip] = '正在获取......'
+                    beijin_time_diff_dict[ip] = '正在获取......'
+                    local_time_diff_dict[ip] = '正在获取......'
                     time_dict[ip] = '正在获取......'
                     if server.os_type == 'Linux':
                         logging.info('启动获取{}系统时间线程'.format(server.ip_address))

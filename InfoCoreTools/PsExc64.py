@@ -141,17 +141,37 @@ def deleteRemoteMachineSystemDump(ip, username, password):
 
 def windows_do_cmd(ip, username, password, cmd):
     try:
+        if not os.path.exists(psexec64):
+            logging.error('psexec工具不存在')
+            return None
         cmd1 = r'{} -s \\{} -u {} -p "{}" cmd.exe /c "{}" 2>&1'.format(psexec64,ip,username,password,cmd)
-        logging.debug(cmd1)
-        output = os.popen(cmd1)
-        output1 = output.read().split('\n')[5]
-        if output1.find("版本不兼容") != -1:
+        logging.info('命令行为:{}'.format(cmd1))
+        output = os.popen(cmd1).read()
+
+        if output.find("版本不兼容") != -1:
             logging.info('Psexec 64位版本获取失败，尝试使用32位版本')
             cmd2 = r'{} -s \\{} -u {} -p "{}" cmd.exe /c "{}" 2>&1'.format(psexec32, ip, username, password, cmd)
-            logging.debug(cmd2)
-            output = os.popen(cmd2)
-            output1 = output.read().split('\n')[5]
-        logging.debug(output1)
+            logging.info('命令行为:{}'.format(cmd2))
+            output = os.popen(cmd2).read()
+
+        output = output.split('\n')
+        i = 0
+        while 1:
+            try:
+                if output[i] == '':  # 列表中删除所有的''元素
+                    output.pop(i)
+                else:
+                    i = i + 1
+            except IndexError:
+                break
+        logging.info('cmd输出:{}'.format(output))
+        output1 = output[3]
+        logging.info('返回值 {}'.format(output1))
         return output1
     except BaseException:
-        logging.exception('未知错误')
+        logging.exception('未知错误windows_do_cmd')
+        return None
+
+#cmd = 'echo %date% %time%'
+
+#windows_do_cmd('192.168.4.94','administrator','infocore`1q',cmd)
