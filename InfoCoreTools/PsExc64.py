@@ -20,12 +20,24 @@ runDisktestBat = r'C:\Users\Administrator\Desktop\OSNAutoTest\RunDiskTest.bat'
 startDebugviewBat = r'C:\Users\Administrator\Desktop\OSNAutoTest\StartDbgview.bat'
 ench_on = True
 
-#远程重启，用PsExec64.exe远程调用系统本地CMD命令（shutdown -r -t 0）实现
-def rebootRemoteMachine(ip, username, password):
-    if os.path.exists(psexec64) == False:
-        sys.exit(1)
-    cmd = r"{} -d \\{} -u {} -p {} cmd.exe /c shutdown -r -t 0 2>nul".format(psexec64,ip,username,password)
-    os.popen(cmd)
+#远程重启，用PsExec远程调用系统本地CMD命令（shutdown -r -t 0）实现
+def windowsRebootRemoteMachine(ip, username, password):
+    cmd = r"shutdown -r -t 0 2>nul"
+    if not os.path.exists(psexec64):
+        logging.error('psexec工具不存在')
+        return None
+    cmd1 = r'"{}" -s \\{} -u {} -p "{}" cmd.exe /c "{}" 2>&1'.format(psexec64, ip, username, password, cmd)
+    logging.debug('命令行为:{}'.format(cmd1))
+    output = os.popen(cmd1).read()
+    logging.debug("命令行执行完毕")
+
+    if output.find("版本不兼容") != -1:
+        logging.debug('Psexec 64位版本获取失败，尝试使用32位版本')
+        cmd2 = r'"{}" -s \\{} -u {} -p "{}" cmd.exe /c "{}" 2>&1'.format(psexec32, ip, username, password, cmd)
+        logging.debug('命令行为:{}'.format(cmd2))
+        output = os.popen(cmd2).read()
+        logging.debug("命令行执行完毕")
+
 
 #远程正常关机，用PsExec64.exe远程调用系统本地CMD命令（shutdown -s -t 0）实现
 def shutdownRemoteMachine(ip, username, password):

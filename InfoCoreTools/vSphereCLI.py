@@ -21,14 +21,20 @@ def startVirtualMachineSoft(esxiIP, esxiUsername, esxiPassword, vmName):
         logger.debug(r'{} {}'.format(vmx.split('/')[-1],result.strip()))
 
 def startVirtualMachineHard(esxiIP, esxiUsername, esxiPassword, vmName):
+    logging.debug("打开虚拟机{}的电源".format(esxiIP))
     vmx = getVmxByVirtualMachineName(esxiIP, esxiUsername, esxiPassword, vmName)
+    logging.debug("vmx路径:{}".format(vmx))
     if vmx:
         if zhPattern.findall(vmx):
             logger.error(r'不支持中文名称的虚拟机')
             exit(1)
         cmd = r'"{}" {}'.format(vmx, r'start hard')
+        logging.debug("执行命令行:{}".format(cmd))
         result = callVirtualMachineCommadLine(esxiIP, esxiUsername, esxiPassword, cmd)
+        logging.debug("命令执行完毕。")
         logger.debug(r'{} {}'.format(vmx.split('/')[-1],result.strip()))
+    else:
+        logging.debug("无法找到虚拟机名称{}".format(vmName))
 
 def stopVirtualMachineSoft(esxiIP, esxiUsername, esxiPassword, vmName):
     vmx = getVmxByVirtualMachineName(esxiIP, esxiUsername, esxiPassword, vmName)
@@ -41,14 +47,20 @@ def stopVirtualMachineSoft(esxiIP, esxiUsername, esxiPassword, vmName):
         logger.debug(r'{} {}'.format(vmx.split('/')[-1],result.strip()))
 
 def stopVirtualMachineHard(esxiIP, esxiUsername, esxiPassword, vmName):
+    logging.debug("关闭虚拟机{}的电源".format(esxiIP))
     vmx = getVmxByVirtualMachineName(esxiIP, esxiUsername, esxiPassword, vmName)
+    logging.debug("vmx路径:{}".format(vmx))
     if vmx:
         if zhPattern.findall(vmx):
             logger.error(r'不支持中文名称的虚拟机')
             exit(1)
         cmd = r'"{}" {}'.format(vmx, r'stop hard')
+        logging.debug("执行命令行:{}".format(cmd))
         result = callVirtualMachineCommadLine(esxiIP, esxiUsername, esxiPassword, cmd)
+        logging.debug("命令执行完毕。")
         logger.debug(r'{} {}'.format(vmx.split('/')[-1],result.strip()))
+    else:
+        logging.debug("无法找到虚拟机名称{}".format(vmName))
 
 def getVirtualMachineList(esxiIP, esxiUsername, esxiPassword):
     result = callVirtualMachineCommadLine(esxiIP, esxiUsername, esxiPassword, r'-l')

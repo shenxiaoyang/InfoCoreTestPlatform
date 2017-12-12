@@ -12,15 +12,10 @@ from InfoCoreTestPlatformGlobalVars import total_os_types
 from TimeCalibrationTool.TimeCalibrationToolFunctions import save_time_calibration_machine_setting_to_xls
 from TimeCalibrationTool.TimeCalibrationToolGlobalVars import time_calibration_machine_setting_file
 from InfoCoreTools.Time import time_minus
-from InfoCoreTools.Time import get_linux_time_str
 from InfoCoreTools.Time import get_beijin_time_str
-from InfoCoreTools.Time import get_windows_time_str
 from InfoCoreTools.Time import get_local_time_str
-from InfoCoreTools.Time import set_linux_time
-from InfoCoreTools.Time import set_windows_time
 from InfoCoreTools.WindowsCMD import pingIP
 from TimeCalibrationTool.TimeCalibrationToolGlobalVars import TIME_CALIBRATION_TOOL_BACKGROUND_DATA_UPDATE_EVENT
-import TimeCalibrationTool.gol
 from TimeCalibrationTool.TimeCalibrationToolThreads import GetBeijinTimeStrThread
 from TimeCalibrationTool.TimeCalibrationToolThreads import GetLocalTimeStrThread
 from TimeCalibrationTool.TimeCalibrationToolThreads import GetLinuxTimeStrThread
@@ -30,8 +25,6 @@ from TimeCalibrationTool.TimeCalibrationToolThreads import SetWindowsTimeThread
 from TimeCalibrationTool.TimeCalibrationToolGlobalVars import local_time_diff_dict
 from TimeCalibrationTool.TimeCalibrationToolGlobalVars import beijin_time_diff_dict
 from TimeCalibrationTool.TimeCalibrationToolGlobalVars import time_dict
-
-
 
 #监控线程，主要用于监控界面是否有更新，如果有更新，则刷新相应的界面
 class TimeCalibrationToolMonitorUIThread(QThread):
@@ -97,6 +90,7 @@ class TimeCalibrationToolDlg(BaseDlg1):
         self.table.setSelectionMode(QTableWidget.SingleSelection)  # 单行选择模式
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)  # 禁止修改单元格内容
         self.table.setAlternatingRowColors(True)  # 隔行变色
+        self.table.setSortingEnabled(True)  #表头排序
 
         self.init_background_data()
         self.refresh_ui()

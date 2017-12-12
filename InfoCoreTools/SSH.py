@@ -26,6 +26,15 @@ def enableFCSwitchPort(switchIP, portNumber, sshPath):
     if os.path.exists(sshPath):
         os.popen(r'"{}" {}@{} portenable {}'.format(sshPath, username, switchIP, portNumber))
 
+def linuxShutDownRemoteMachine(ip,username,password):
+    port = 22
+    cmd = r'poweroff'
+    ssh(ip, port, username, password, cmd)
+
+def linuxRebootRemoteMachine(ip,username,password):
+    port = 22
+    cmd = r'reboot'
+    ssh(ip, port, username, password, cmd)
 
 def ssh(ip,port,username,password,cmd):
     ssh = paramiko.SSHClient()

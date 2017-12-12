@@ -10,56 +10,49 @@ from InfoCoreTools.WindowsCMD import pingIP
 
 logger = logging.getLogger('root.PortTestTool.PortTestToolUI')
 
-class PortTestToolDlg(BaseDlg1):
+class PortScanToolDlg(BaseDlg1):
     def __init__(self, parent=None):
         #super这个用法是调用父类的构造函数
         # parent=None表示默认没有父Widget，如果指定父亲Widget，则调用之
-        super(PortTestToolDlg, self).__init__(parent)
+        super(PortScanToolDlg, self).__init__(parent)
 
     def init_ui(self):
-        self.resize(350, 50)  # 设置窗口大小
+        self.resize(350, 60)  # 设置窗口大小
         self.setFixedSize(self.width(), self.height())  # 固定窗口大小
-        self.setWindowTitle('端口测试')  # 设置窗口标题
+        self.setWindowTitle('端口扫描')  # 设置窗口标题
 
         self.horizontalLayoutWidget1 = QWidget(self)
-        self.horizontalLayoutWidget1.setGeometry(QRect(0, 0, 170, 50))
+        self.horizontalLayoutWidget1.setGeometry(QRect(0, 0, 170, 60))
         self.horizontalLayout1 = QHBoxLayout(self.horizontalLayoutWidget1)
         self.horizontalLayout1.setContentsMargins(10, 10,0, 10)
 
-        self.label_port_test_ip_address = QLabel(self)
-        self.label_port_test_ip_address.setText('IP地址:')
-        self.horizontalLayout1.addWidget(self.label_port_test_ip_address)
+        self.label_ip_address = QLabel(self)
+        self.label_ip_address.setText('IP地址:')
+        self.horizontalLayout1.addWidget(self.label_ip_address)
 
-        self.lineEdit_port_test_ip_address = QLineEdit(self)
-        self.horizontalLayout1.addWidget(self.lineEdit_port_test_ip_address)
+        self.lineEdit_ip_address = QLineEdit(self)
+        self.horizontalLayout1.addWidget(self.lineEdit_ip_address)
 
         self.horizontalLayoutWidget2 = QWidget(self)
-        self.horizontalLayoutWidget2.setGeometry(QRect(170, 0, 100, 50))
+        self.horizontalLayoutWidget2.setGeometry(QRect(170, 0, 100, 60))
         self.horizontalLayout2 = QHBoxLayout(self.horizontalLayoutWidget2)
         self.horizontalLayout2.setContentsMargins(5, 10, 10, 10)
 
-        self.label_port_test = QLabel(self)
-        self.label_port_test.setText('端口:')
-        self.horizontalLayout2.addWidget(self.label_port_test)
-
-        self.lineEdit_port_test = QLineEdit(self)
-        self.horizontalLayout2.addWidget(self.lineEdit_port_test)
-
         self.horizontalLayoutWidget3 = QWidget(self)
-        self.horizontalLayoutWidget3.setGeometry(QRect(270, 0, 80, 50))
+        self.horizontalLayoutWidget3.setGeometry(QRect(270, 0, 80, 60))
         self.horizontalLayout3 = QHBoxLayout(self.horizontalLayoutWidget3)
         self.horizontalLayout3.setContentsMargins(10, 10, 10, 10)
 
-        self.btn_port_test = QPushButton(self)
-        self.btn_port_test.setText('端口测试')
-        self.horizontalLayout3.addWidget(self.btn_port_test)
+        self.btn_test = QPushButton(self)
+        self.btn_test.setText('端口扫描')
+        self.horizontalLayout3.addWidget(self.btn_test)
 
     def connect_all_signal_slot(self):
-        self.btn_port_test.clicked.connect(self.btn_port_test_clicked)
+        self.btn_test.clicked.connect(self.btn_test_clicked)
 
-    def btn_port_test_clicked(self):
-        ip_address = self.lineEdit_port_test_ip_address.text()
-        port = self.lineEdit_port_test.text()
+    def btn_test_clicked(self):
+        ip_address = self.lineEdit_ip_address.text()
+        port = self.lineEdit_port.text()
 
         if ip_address == '':
             self.msg_failed('请填写IP地址')

@@ -16,6 +16,9 @@ from TimeCalibrationTool.TimeCalibrationToolGlobalVars import time_calibration_m
 from TimeCalibrationTool.TimeCalibrationToolGlobalVars import time_calibration_machine_setting_dict
 import TimeCalibrationTool.gol
 from PortTestTool.PortTestToolUI import PortTestToolDlg
+from ComputerPowerControlTool.ComputerPowerControlToolUI import ComputerPowerControlToolDlg
+from ComputerPowerControlTool.ComputerPowerControlToolFunctions import read_power_control_machine_setting_from_xls
+from ComputerPowerControlTool.ComputerPowerControlToolGlobalVals import machine_power_control_setting_file
 
 logger = logging.getLogger('root.LogCollectToolUI')
 
@@ -32,7 +35,7 @@ class MainWindows(QMainWindow):
 
     def init_ui(self):
         self.setObjectName("MainWindow")
-        self.resize(140, 260)  # 设置窗口大小
+        self.resize(140, 300)  # 设置窗口大小
         self.setFixedSize(self.width(), self.height())  # 固定窗口大小
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         self.setWindowTitle('InfoCore测试')
@@ -78,12 +81,22 @@ class MainWindows(QMainWindow):
         self.btn_port_test.setText('端口测试')
 
         i = i + 1
+        self.btn_port_scan = QPushButton(self)  # 按钮-端口扫描
+        self.btn_port_scan.setGeometry(QRect(x_margin,
+                                             y_margin + i * (button_height + row_spacing),
+                                             button_width1,
+                                             button_height))
+        self.btn_port_scan.setText('端口扫描')
+        self.btn_port_scan.setDisabled(True)
+
+        i = i + 1
         self.btn_computer_power_control = QPushButton(self) #按钮-服务器电源控制
         self.btn_computer_power_control.setGeometry(QRect(x_margin,
                                                           y_margin + i * (button_height + row_spacing),
                                                           button_width1,
                                                           button_height))
         self.btn_computer_power_control.setText('服务器电源控制')
+        #self.btn_computer_power_control.setDisabled(True)
 
         i = i + 1
         self.btn_computer_init = QPushButton(self)  # 按钮-Streamer冒烟测试
@@ -92,6 +105,7 @@ class MainWindows(QMainWindow):
                                                  button_width1,
                                                  button_height))
         self.btn_computer_init.setText('服务器初始化')
+        self.btn_computer_init.setDisabled(True)
 
 
         i = i + 1
@@ -101,6 +115,7 @@ class MainWindows(QMainWindow):
                                                           button_width1,
                                                           button_height))
         self.btn_streamer_smoke_testing.setText('Streamer冒烟测试')
+        self.btn_streamer_smoke_testing.setDisabled(True)
 
     def connect_all_signal_slot(self):
         self.btn_streamer_smoke_testing.clicked.connect(self.btn_streamer_smoke_testing_clicked)
@@ -108,6 +123,16 @@ class MainWindows(QMainWindow):
         self.btn_streamer_license_tool.clicked.connect(self.btn_streamer_license_tool_clicked)
         self.btn_time_calibration.clicked.connect(self.btn_time_calibration_clicked)
         self.btn_port_test.clicked.connect(self.btn_port_test_clicked)
+        self.btn_computer_power_control.clicked.connect(self.btn_computer_power_control_clicked)
+
+    def btn_computer_power_control_clicked(self):
+        logging.info('读取服务器电源控制-服务器配置文件')
+        if not read_power_control_machine_setting_from_xls(machine_power_control_setting_file):
+            self.msg_failed('读取配置文件失败')
+            return
+        computer_power_control_dlg = ComputerPowerControlToolDlg(self)
+        logging.info('打开服务器电源控制对话框')
+        computer_power_control_dlg.show()
 
     def btn_port_test_clicked(self):
         port_test_dlg = PortTestToolDlg(self)
@@ -115,11 +140,11 @@ class MainWindows(QMainWindow):
         port_test_dlg.show()
 
     def btn_time_calibration_clicked(self):
-        TimeCalibrationTool.gol._init() #初始化全局变量
         logging.info('读取时间校准-服务器配置文件')
         if not read_time_calibration_machine_setting_from_xls(time_calibration_machine_setting_file):
             self.msg_failed('读取配置文件失败')
             return
+        TimeCalibrationTool.gol._init()  # 初始化全局变量
         TimeCalibrationTool.gol.set_value('refresh',len(time_calibration_machine_setting_dict))
         time_calibration_tool_dlg = TimeCalibrationToolDlg(self)
         logging.info('打开时间校准对话框')
