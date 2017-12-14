@@ -13,7 +13,7 @@ IPMITool = r'{}\InfoCoreTools\bmc\ipmitool.exe'.format(os.path.dirname(os.path.a
 def powerOn(ip, username, password):
     if os.path.exists(IPMITool):
         logging.debug(r'ipmitool:{}打开电源'.format(ip))
-        cmd = r'{} -I lanplus -H {} -U {} -P {} chassis power on 2>nul'.format(IPMITool,
+        cmd = r'"{}" -I lanplus -H "{}" -U "{}" -P "{}" chassis power on 2>nul'.format(IPMITool,
                                                                                ip,
                                                                                username,
                                                                                password)
@@ -31,7 +31,7 @@ def powerOn(ip, username, password):
 def powerOff(ip, username, password):
     if os.path.exists(IPMITool):
         logging.debug(r'ipmitool:{}关闭电源'.format(ip))
-        cmd = r'{} -I lanplus -H {} -U {} -P {} chassis power off 2>&1'.format(IPMITool,
+        cmd = r'"{}" -I lanplus -H "{}" -U "{}" -P "{}" chassis power off 2>&1'.format(IPMITool,
                                                                                ip,
                                                                                username,
                                                                                password)
