@@ -1,7 +1,5 @@
 # -*- coding:utf-8 -*-
 import collections
-import threading
-
 from InfoCoreTestPlatformGlobalVars import run_path
 
 global machine_power_control_setting_dict

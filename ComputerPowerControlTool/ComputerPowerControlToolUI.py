@@ -2,11 +2,8 @@
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import logging
-import socket
-import re
 
 from InfoCoreTestPlatformBaseUI import BaseDlg1
-from InfoCoreTools.WindowsCMD import pingIP
 from ComputerPowerControlTool.ComputerPowerControlToolGlobalVals import machine_power_control_setting_dict
 from ComputerPowerControlTool.ComputerPowerControlToolGlobalVals import machine_power_control_setting_file
 from ComputerPowerControlTool.ComputerPowerControlToolClass import ComputerPowerControlMachine
@@ -44,14 +41,6 @@ class ComputerPowerControlToolDlg(BaseDlg1):
         self.table.setSelectionMode(QTableWidget.SingleSelection)  # 单行选择模式
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)  # 禁止修改单元格内容
         self.table.setAlternatingRowColors(True)  # 隔行变色
-        self.table.setSortingEnabled(True)  # 表头排序self.table = QTableWidget(self)  # 创建表
-        self.table.verticalHeader().setVisible(False)  # 隐藏垂直表头
-        self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)  # 禁用滚动条
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 禁止拖动列宽
-        self.table.setSelectionBehavior(QTableWidget.SelectRows)  # 按行选择模式
-        self.table.setSelectionMode(QTableWidget.SingleSelection)  # 单行选择模式
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)  # 禁止修改单元格内容
-        self.table.setAlternatingRowColors(True)  # 隔行变色
         self.table.setSortingEnabled(True)  # 表头排序
 
         self.refresh_ui()
@@ -60,10 +49,10 @@ class ComputerPowerControlToolDlg(BaseDlg1):
         self.table.setColumnCount(4)
         self.table.setRowCount(len(machine_power_control_setting_dict))
 
-        logging.info('设置表头')
+        logging.debug('设置表头')
         horizontalHeader = ["设备类型", "操作系统类型", "IP地址", "操作"]
         self.table.setHorizontalHeaderLabels(horizontalHeader)
-        logging.info('设置表内容')
+        logging.debug('设置表内容')
         i = 0
         for ip in machine_power_control_setting_dict:
             server = machine_power_control_setting_dict[ip]
@@ -76,7 +65,7 @@ class ComputerPowerControlToolDlg(BaseDlg1):
                 logging.exception('未知错误')
 
             i = i + 1
-        logging.info('表内容布置完毕')
+        logging.debug('表内容布置完毕')
         self.set_layout()
 
     def connect_all_signal_slot(self):
@@ -166,7 +155,7 @@ class ComputerPowerControlToolDlg(BaseDlg1):
 
     def set_layout(self):
         try:
-            logging.info("界面控件布局")
+            logging.debug("界面控件布局")
             x = 0
             y = 0
             self.btn_add.setGeometry(
@@ -212,7 +201,7 @@ class ComputerPowerControlToolDlg(BaseDlg1):
             self.resize(col_width + 2 * self.x_left_margin_2,
                         row_heigth + self.table_head_heigth + 2 * self.y_up_margin_2 + self.button_height_25 + self.widget_heigth_space_5)  # 设置窗口大小
 
-            logging.info('界面控件布局结束')
+            logging.debug('界面控件布局结束')
         except BaseException:
             logging.exception('未知错误')
 
@@ -434,6 +423,88 @@ class AddMachineSettingDlg(BaseDlg1):
             self.btn_apply.setDisabled(True)
 
     def clicked_btn_apply(self):
+        ip = self.qline_edit_ip_address.text()
+        try:
+            tmp = machine_power_control_setting_dict[ip]
+            self.msg_failed('此IP地址已经存在')
+        except KeyError:
+            server = ComputerPowerControlMachine()
+            server.computer_type = self.comboBox_computer_type.currentText()
+            server.os_type = self.comboBox_os_type.currentText()
+            server.ip_address = self.qline_edit_ip_address.text()
+            server.username = self.qline_edit_username.text()
+            server.password = self.qline_edit_password.text()
+            server.is_ipmi_enabled = False
+            server.ipmi_ip = ''
+            server.ipmi_username = ''
+            server.ipmi_password = ''
+            server.is_vm = False
+            server.vm_name = ''
+            server.esxi_ip = ''
+            server.esxi_username = ''
+            server.esxi_password = ''
+
+            if self.checkbox_is_enable_ipmi.isChecked():
+                server.is_ipmi_enabled = True
+                server.ipmi_ip = self.qline_edit_ipmi_ip.text()
+                server.ipmi_username = self.qline_edit_ipmi_username.text()
+                server.ipmi_password = self.qline_edit_ipmi_password.text()
+
+            if self.checkbox_is_virtual_machine.isChecked():
+                server.is_vm = True
+                server.vm_name = self.qline_edit_virtual_machine_name.text()
+                server.esxi_ip = self.qline_edit_esxi_ip.text()
+                server.esxi_username = self.qline_edit_esxi_username.text()
+                server.esxi_password = self.qline_edit_esxi_password.text()
+            machine_power_control_setting_dict[server.ip_address] = server
+
+            self.sin1.emit()  # 发射自定义信号（配置更新后发射信号）
+            self.close()
+
+class ModifyMachineSettingDlg(AddMachineSettingDlg):
+    sin1 = pyqtSignal()  # 自定义信号
+    def __init__(self, ip, parent=None):
+        #super这个用法是调用父类的构造函数
+        # parent=None表示默认没有父Widget，如果指定父亲Widget，则调用之
+        super(ModifyMachineSettingDlg, self).__init__(parent)
+        self.ip = ip
+        self.set_default(self.ip)
+
+    def set_ui(self):
+        self.setWindowTitle("修改服务器")
+        self.btn_apply.setText("确定")
+
+    def set_default(self,ip_address):
+        try:
+            server = machine_power_control_setting_dict[ip_address]
+            if server.computer_type == '实体机':
+                self.comboBox_computer_type.setCurrentText('实体机')
+            else:
+                self.comboBox_computer_type.setCurrentText('虚拟机')
+            if server.os_type == 'Windows':
+                self.comboBox_os_type.setCurrentText('Windows')
+            else:
+                self.comboBox_os_type.setCurrentText('Linux')
+            self.qline_edit_ip_address.setText(server.ip_address)
+            self.qline_edit_username.setText(server.username)
+            self.qline_edit_password.setText(server.password)
+            if server.is_ipmi_enabled:
+                self.checkbox_is_enable_ipmi.setChecked(True)
+                self.qline_edit_ipmi_ip.setText(server.ipmi_ip)
+                self.qline_edit_ipmi_username.setText(server.ipmi_username)
+                self.qline_edit_ipmi_password.setText(server.ipmi_password)
+            if server.is_vm:
+                self.checkbox_is_virtual_machine.setChecked(True)
+                self.qline_edit_esxi_ip.setText(server.esxi_ip)
+                self.qline_edit_esxi_username.setText(server.esxi_username)
+                self.qline_edit_esxi_password.setText(server.esxi_password)
+                self.qline_edit_virtual_machine_name.setText(server.vm_name)
+        except BaseException:
+            logging.exception('未知错误')
+
+    def clicked_btn_apply(self):
+        machine_power_control_setting_dict.pop(self.ip)
+
         server = ComputerPowerControlMachine()
         server.computer_type = self.comboBox_computer_type.currentText()
         server.os_type = self.comboBox_os_type.currentText()
@@ -466,46 +537,4 @@ class AddMachineSettingDlg(BaseDlg1):
 
         self.sin1.emit()  # 发射自定义信号（配置更新后发射信号）
         self.close()
-
-class ModifyMachineSettingDlg(AddMachineSettingDlg):
-    sin1 = pyqtSignal()  # 自定义信号
-    def __init__(self, ip, parent=None):
-        #super这个用法是调用父类的构造函数
-        # parent=None表示默认没有父Widget，如果指定父亲Widget，则调用之
-        super(ModifyMachineSettingDlg, self).__init__(parent)
-        self.ip = ip
-        self.set_default(self.ip)
-
-    def set_ui(self):
-        self.setWindowTitle("修改服务器")
-        self.btn_apply.setText("确定")
-        self.qline_edit_ip_address.setDisabled(True)
-
-    def set_default(self,ip_address):
-        try:
-            server = machine_power_control_setting_dict[ip_address]
-            if server.computer_type == '实体机':
-                self.comboBox_computer_type.setCurrentText('实体机')
-            else:
-                self.comboBox_computer_type.setCurrentText('虚拟机')
-            if server.os_type == 'Windows':
-                self.comboBox_os_type.setCurrentText('Windows')
-            else:
-                self.comboBox_os_type.setCurrentText('Linux')
-            self.qline_edit_ip_address.setText(server.ip_address)
-            self.qline_edit_username.setText(server.username)
-            self.qline_edit_password.setText(server.password)
-            if server.is_ipmi_enabled:
-                self.checkbox_is_enable_ipmi.setChecked(True)
-                self.qline_edit_ipmi_ip.setText(server.ipmi_ip)
-                self.qline_edit_ipmi_username.setText(server.ipmi_username)
-                self.qline_edit_ipmi_password.setText(server.ipmi_password)
-            if server.is_vm:
-                self.checkbox_is_virtual_machine.setChecked(True)
-                self.qline_edit_esxi_ip.setText(server.esxi_ip)
-                self.qline_edit_esxi_username.setText(server.esxi_username)
-                self.qline_edit_esxi_password.setText(server.esxi_password)
-                self.qline_edit_virtual_machine_name.setText(server.vm_name)
-        except BaseException:
-            logging.exception('未知错误')
 

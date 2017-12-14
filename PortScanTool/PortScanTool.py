@@ -8,7 +8,7 @@ import re
 from InfoCoreTestPlatformBaseUI import BaseDlg1
 from InfoCoreTools.WindowsCMD import pingIP
 
-logger = logging.getLogger('root.PortTestTool.PortTestToolUI')
+logger = logging.getLogger('root.PortScanTool.PortScanToolUI')
 
 class PortScanToolDlg(BaseDlg1):
     def __init__(self, parent=None):

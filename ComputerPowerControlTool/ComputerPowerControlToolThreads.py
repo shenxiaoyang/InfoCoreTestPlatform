@@ -9,6 +9,8 @@ from InfoCoreTools.SSH import linuxRebootRemoteMachine
 from InfoCoreTools.vSphereCLI import startVirtualMachineHard
 from InfoCoreTools.vSphereCLI import stopVirtualMachineHard
 from InfoCoreTools.WindowsCMD import pingIP
+from InfoCoreTools.IPMI import powerOn
+from InfoCoreTools.IPMI import powerOff
 
 class PowerOnThread(threading.Thread):
     daemon = True  # 设置True表示主线程关闭的时候，这个线程也会被关闭。
@@ -37,7 +39,8 @@ class PowerOnThread(threading.Thread):
         if computer_type == '实体机':
             logging.info("检测到{}为：实体机".format(ip_address))
             if is_ipmi_enabled:
-                pass
+                logging.info("{}已经配置IPMI信息".format(ip_address))
+                powerOn(ipmi_ip,ipmi_username,ipmi_password)
             else:
                 logging.error("为配置IPMI信息，无法打开实体机{}的电源".format(ip_address))
         else:
@@ -76,7 +79,8 @@ class PowerOffThread(threading.Thread):
         if computer_type == '实体机':
             logging.info("检测到{}为：实体机".format(ip_address))
             if is_ipmi_enabled:
-                pass
+                logging.info("{}已经配置IPMI信息".format(ip_address))
+                powerOff(ipmi_ip,ipmi_username,ipmi_password)
             else:
                 logging.error("为配置IPMI信息，无法打开实体机{}的电源".format(ip_address))
         else:
