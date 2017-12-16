@@ -101,4 +101,5 @@ ENV/
 .mypy_cache/
 .idea/
 test.py
+test1.py
 /log/

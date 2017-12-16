@@ -19,6 +19,7 @@ from PortTestTool.PortTestToolUI import PortTestToolDlg
 from ComputerPowerControlTool.ComputerPowerControlToolUI import ComputerPowerControlToolDlg
 from ComputerPowerControlTool.ComputerPowerControlToolFunctions import read_power_control_machine_setting_from_xls
 from ComputerPowerControlTool.ComputerPowerControlToolGlobalVals import machine_power_control_setting_file
+from IometerResultHandlerTool.IometerResultHandlerToolUI import IometerResultHandlerDlg
 
 logger = logging.getLogger('root.LogCollectToolUI')
 
@@ -35,7 +36,7 @@ class MainWindows(QMainWindow):
 
     def init_ui(self):
         self.setObjectName("MainWindow")
-        self.resize(140, 300)  # 设置窗口大小
+        self.resize(140, 320)  # 设置窗口大小
         self.setFixedSize(self.width(), self.height())  # 固定窗口大小
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         self.setWindowTitle('InfoCore测试')
@@ -99,13 +100,21 @@ class MainWindows(QMainWindow):
         #self.btn_computer_power_control.setDisabled(True)
 
         i = i + 1
-        self.btn_computer_init = QPushButton(self)  # 按钮-Streamer冒烟测试
+        self.btn_computer_init = QPushButton(self)  # 按钮-服务器初始化
         self.btn_computer_init.setGeometry(QRect(x_margin,
                                                  y_margin + i * (button_height + row_spacing),
                                                  button_width1,
                                                  button_height))
         self.btn_computer_init.setText('服务器初始化')
         self.btn_computer_init.setDisabled(True)
+
+        i = i + 1
+        self.btn_iometer_result_handler = QPushButton(self)  # 按钮-Iometer结果处理
+        self.btn_iometer_result_handler.setGeometry(QRect(x_margin,
+                                                          y_margin + i * (button_height + row_spacing),
+                                                          button_width1,
+                                                          button_height))
+        self.btn_iometer_result_handler.setText('Iometer结果处理')
 
 
         i = i + 1
@@ -117,6 +126,7 @@ class MainWindows(QMainWindow):
         self.btn_streamer_smoke_testing.setText('Streamer冒烟测试')
         self.btn_streamer_smoke_testing.setDisabled(True)
 
+
     def connect_all_signal_slot(self):
         self.btn_streamer_smoke_testing.clicked.connect(self.btn_streamer_smoke_testing_clicked)
         self.btn_log_collect_tool.clicked.connect(self.btn_log_collect_tool_clicked)
@@ -124,6 +134,14 @@ class MainWindows(QMainWindow):
         self.btn_time_calibration.clicked.connect(self.btn_time_calibration_clicked)
         self.btn_port_test.clicked.connect(self.btn_port_test_clicked)
         self.btn_computer_power_control.clicked.connect(self.btn_computer_power_control_clicked)
+        self.btn_iometer_result_handler.clicked.connect(self.btn_iometer_result_handler_clicked)
+
+    def btn_iometer_result_handler_clicked(self):
+        try:
+            iometer_result_handler_dlg = IometerResultHandlerDlg(self)
+            iometer_result_handler_dlg.show()
+        except BaseException:
+            logging.exception('未知错误')
 
     def btn_computer_power_control_clicked(self):
         logging.info('读取服务器电源控制-服务器配置文件')
