@@ -60,8 +60,8 @@ class IometerResultHandlerDlg(BaseDlg1):
         self.btn_remove_file.setText('-')
         self.horizontalLayout2.addWidget(self.btn_remove_file)
 
-        self.btn_get_result = QPushButton(self)
-        self.btn_get_result.setText('处理csv')
+        self.btn_compare = QPushButton(self)
+        self.btn_compare.setText('比较')
 
         self.set_layout()
 
@@ -78,7 +78,7 @@ class IometerResultHandlerDlg(BaseDlg1):
                                                        self.horizontalLayout2_width,
                                                        self.horizontalLayout1_heigth))
 
-        self.btn_get_result.setGeometry(QRect(
+        self.btn_compare.setGeometry(QRect(
             2 * self.x_left_margin_10 + self.horizontalLayout1_width + self.horizontalLayout2_width - self.button_width_60,
             2 * self.y_up_margin_10 + self.csv_num * self.horizontalLayout1_heigth,
             self.button_width_60,
@@ -87,11 +87,10 @@ class IometerResultHandlerDlg(BaseDlg1):
         self.resize(3 * self.x_left_margin_10 + self.horizontalLayout1_width + self.horizontalLayout2_width,
                     3 * self.y_up_margin_10 + (self.csv_num + 1) * self.horizontalLayout1_heigth)  # 设置窗口大小
 
-
     def connect_all_signal_slot(self):
         self.btn_add_file.clicked.connect(self.btn_add_file_clicked)
         self.btn_remove_file.clicked.connect(self.btn_remove_file_clicked)
-        self.btn_get_result.clicked.connect(self.btn_get_result_clicked)
+        self.btn_compare.clicked.connect(self.btn_get_result_clicked)
         #下面是个很蠢的办法........
         for i in range(self.csv_num):
             if i == 0:
@@ -110,7 +109,6 @@ class IometerResultHandlerDlg(BaseDlg1):
     def btn_get_result_clicked(self):
         pass
 
-
     def btn_choose_file_clicked(self,num):
         open = QFileDialog()
         self.open_path = open.getOpenFileName()
@@ -118,11 +116,15 @@ class IometerResultHandlerDlg(BaseDlg1):
         self.lineEdit_file_path[num].setText(self.path)
 
     def btn_remove_file_clicked(self):
+        if self.csv_num == 2:
+            self.btn_remove_file.setDisabled(True)
         self.csv_num = self.csv_num - 1
         self.horizontalLayoutWidget[self.csv_num].close()
         self.set_layout()
 
     def btn_add_file_clicked(self):
+        if self.csv_num == 1:
+            self.btn_remove_file.setEnabled(True)
         self.csv_num = self.csv_num + 1
         i = self.csv_num - 1
         self.horizontalLayoutWidget[i] = QWidget(self)
@@ -144,8 +146,3 @@ class IometerResultHandlerDlg(BaseDlg1):
         self.horizontalLayoutWidget[i].show()
 
         self.set_layout()
-
-
-
-
-
