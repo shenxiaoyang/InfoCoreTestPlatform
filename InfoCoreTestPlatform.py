@@ -5,6 +5,7 @@ import sys
 from PyQt5 import QtWidgets
 
 #可能解决一个不能import backend的BUG
+#不知道为什么，pyinstall做出来的exe，某些环境运行的时候，会出现import backend error
 from cryptography.hazmat.backends.openssl.backend import backend
 x = backend
 

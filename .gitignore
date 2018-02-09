@@ -103,3 +103,4 @@ ENV/
 test.py
 test1.py
 /log/
+.spec

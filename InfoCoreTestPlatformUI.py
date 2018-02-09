@@ -118,17 +118,16 @@ class MainWindows(QMainWindow):
 
 
         i = i + 1
-        self.btn_streamer_smoke_testing = QPushButton(self)  # 按钮-Streamer冒烟测试
-        self.btn_streamer_smoke_testing.setGeometry(QRect(x_margin,
-                                                          y_margin + i * (button_height + row_spacing),
-                                                          button_width1,
-                                                          button_height))
-        self.btn_streamer_smoke_testing.setText('Streamer冒烟测试')
-        self.btn_streamer_smoke_testing.setDisabled(True)
+        self.btn_umdh_tools = QPushButton(self)  # 按钮-UMDH内存工具
+        self.btn_umdh_tools.setGeometry(QRect(x_margin,
+                                              y_margin + i * (button_height + row_spacing),
+                                              button_width1,
+                                              button_height))
+        self.btn_umdh_tools.setText('UMDH内存工具')
+
 
 
     def connect_all_signal_slot(self):
-        self.btn_streamer_smoke_testing.clicked.connect(self.btn_streamer_smoke_testing_clicked)
         self.btn_log_collect_tool.clicked.connect(self.btn_log_collect_tool_clicked)
         self.btn_streamer_license_tool.clicked.connect(self.btn_streamer_license_tool_clicked)
         self.btn_time_calibration.clicked.connect(self.btn_time_calibration_clicked)
